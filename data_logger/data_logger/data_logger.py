@@ -13,7 +13,6 @@ import message_filters
 import math
 import threading
 import requests
-import io
 import json
 import time, hmac, hashlib
 
@@ -34,7 +33,7 @@ class DataLogger(Node):
         self.rows = []
         self.column_labels = None
         self.pos_threshold = 0.25
-        self.yaw_threshold = 0.10 
+        # self.yaw_threshold = 0.10 
         self.done = False  
 
         # Start a separate thread to handle live terminal input
@@ -47,7 +46,7 @@ class DataLogger(Node):
         self.sync = message_filters.ApproximateTimeSynchronizer(
             [self.scan_subscriber, self.odom_subscriber],
             queue_size=20,
-            slop=0.1,                # max time difference (s) between the three messages
+            slop=0.1,                # max time difference (s) between the two messages
             allow_headerless=True,   
         )
         self.sync.registerCallback(self.universal_callback)
@@ -150,8 +149,8 @@ class DataLogger(Node):
         self.rows.append(row)
 
         distance = math.hypot(relative_x, relative_y)
-        reached = distance < self.pos_threshold and (
-            self.yaw_threshold is None or abs(relative_orientation) < self.yaw_threshold)
+        reached = distance < self.pos_threshold 
+            # and (self.yaw_threshold is None or abs(relative_orientation) < self.yaw_threshold)
 
         self.get_logger().info(f"rows={len(self.rows)} distance={distance:.2f} m",
                            throttle_duration_sec=2.0)

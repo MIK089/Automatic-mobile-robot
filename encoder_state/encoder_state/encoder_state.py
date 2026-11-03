@@ -64,7 +64,7 @@ class EncoderState(Node):
 
 
     def write_serial(self, msg):
-        DISTANCE_BETWEEN_WHEELS = 0.344  # Adjust this value based on your robot's specifications
+        DISTANCE_BETWEEN_WHEELS = 0.344  # meters
 
         if msg.linear.x > 0:
             rightWheelVelocity = msg.linear.x
