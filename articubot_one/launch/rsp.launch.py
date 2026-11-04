@@ -39,7 +39,7 @@ def generate_launch_description():
         emulate_tty=True,
         namespace='',
         parameters=[{
-            'port': '/dev/serial/by-path/pci-0000:03:00.0-usb-0:2:1.0-port0',
+            'port': '/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0',
             'frame_id': 'laser_frame',
             'ignore_array': "",
             'baudrate': 230400,

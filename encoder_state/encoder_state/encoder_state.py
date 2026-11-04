@@ -11,7 +11,7 @@ class EncoderState(Node):
 
     def __init__(self):
         super().__init__('encoder_state')
-        self.declare_parameter('port', '/dev/serial/by-path/pci-0000:03:00.0-usb-0:3.1:1.0')# Adjust the port and baudrate as needed
+        self.declare_parameter('port', '/dev/serial/by-id/usb-Arduino__www.arduino.cc__Arduino_Uno_11427551267123716581-if00')# Adjust the port and baudrate as needed
         self.declare_parameter('baud', 115200)
 
         port = self.get_parameter('port').value
@@ -69,17 +69,14 @@ class EncoderState(Node):
         if msg.linear.x > 0:
             rightWheelVelocity = msg.linear.x
             leftWheelVelocity = msg.linear.x
-        elif msg.angular.z > 0:
-            rightWheelVelocity = msg.angular.z * DISTANCE_BETWEEN_WHEELS / 2
-            leftWheelVelocity = -(msg.angular.z) * DISTANCE_BETWEEN_WHEELS / 2
-        elif msg.angular.z < 0:
+        elif (msg.angular.z > 0) or (msg.angular.z < 0):
             rightWheelVelocity = -(msg.angular.z) * DISTANCE_BETWEEN_WHEELS / 2
             leftWheelVelocity = msg.angular.z * DISTANCE_BETWEEN_WHEELS / 2
         else:
             rightWheelVelocity = 0
             leftWheelVelocity = 0
 
-        line = f'{rightWheelVelocity:.1f}, {leftWheelVelocity:.1f}\n'
+        line = f'{rightWheelVelocity:.1f},{leftWheelVelocity:.1f}\n'
         try:
             self.serial_port.write(line.encode('utf-8'))
         except serial.SerialException as e:
